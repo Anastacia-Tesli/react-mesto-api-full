@@ -1,0 +1,14 @@
+.profile__info {
+  margin: 26px 0 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  text-align: center;
+}
+@media screen and (min-width: 1024px) {
+  .profile__info {
+    margin: 0 auto 0 30px;
+    align-items: flex-start;
+  }
+}

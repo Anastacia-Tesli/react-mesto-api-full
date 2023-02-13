@@ -1,0 +1,14 @@
+.place__like-button {
+  width: 22px;
+  height: 19px;
+  background-image: url(../../../images/like.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  border: none;
+  background-color: #fff;
+  transition: opacity 0.2s ease-out;
+}
+.place__like-button:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}

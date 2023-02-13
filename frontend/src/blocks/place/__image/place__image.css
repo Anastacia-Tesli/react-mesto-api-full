@@ -1,0 +1,13 @@
+.place__image {
+  width: 282px;
+  height: 282px;
+  object-position: top;
+  object-fit: cover;
+  background-color: #000;
+  color: #fff;
+  transition: opacity 0.2s ease-out;
+}
+.place__image:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}

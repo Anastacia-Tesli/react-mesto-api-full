@@ -1,0 +1,11 @@
+.header__group {
+  display: flex;
+  flex-direction: column;
+}
+@media screen and (min-width: 1024px) {
+  .header__group {
+    flex-direction: row;
+    gap: 24px;
+    align-items: center;
+  }
+}

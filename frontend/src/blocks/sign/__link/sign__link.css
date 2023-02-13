@@ -1,0 +1,11 @@
+.sign__link {
+  margin: 0;
+  color: #fff;
+  font-size: 14px;
+  line-height: 17px;
+  text-decoration: none;
+  transition: opacity 0.2s ease-out;
+}
+.sign__link:hover {
+  opacity: 0.6;
+}

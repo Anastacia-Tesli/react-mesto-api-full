@@ -1,0 +1,13 @@
+.popup_type_info {
+  align-items: center;
+  text-align: center;
+  gap: 40px;
+  padding: 50px 10px;
+}
+
+@media screen and (min-width: 1024px) {
+  .popup_type_info {
+    padding: 60px 20px;
+    gap: 32px;
+  }
+}
