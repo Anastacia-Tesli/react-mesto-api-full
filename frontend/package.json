@@ -1,7 +1,7 @@
 {
   "name": "react-mesto-auth",
   "version": "0.1.0",
-  "homepage": "https://anastacia-tesli.github.io/react-mesto-auth/",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
