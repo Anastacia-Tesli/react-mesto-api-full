@@ -68,8 +68,10 @@ module.exports.createUser = (req, res, next) => {
             password: hash,
           });
         })
-        .then(() => {
-          res.status(CREATED_CODE).send({ name, about, avatar, email });
+        .then((user) => {
+          res
+            .status(CREATED_CODE)
+            .send({ email: user.email, name: user.name, about: user.about, avatar: user.avatar });
         })
         .catch((err) => {
           if (err instanceof mongoose.Error.ValidationError) {
@@ -88,7 +90,11 @@ module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       res.send({
-        user,
+        _id: user._id,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
       });
     })
     .catch(next);
@@ -97,9 +103,7 @@ module.exports.getUser = (req, res, next) => {
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
-      res.send({
-        data: users,
-      });
+      res.send(users);
     })
     .catch(next);
 };
@@ -110,9 +114,7 @@ module.exports.getUserById = (req, res, next) => {
       if (user === null) {
         throw new NotFoundError(NOT_FOUND_USER_MESSAGE);
       }
-      return res.send({
-        data: user,
-      });
+      return res.send(user);
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
@@ -131,9 +133,7 @@ function updateUser(req, res, next, info) {
       if (user === null) {
         throw new NotFoundError(NOT_FOUND_USER_MESSAGE);
       }
-      return res.send({
-        data: user,
-      });
+      return res.send(user);
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {

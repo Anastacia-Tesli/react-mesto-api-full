@@ -10,14 +10,14 @@ const { IncorrectError, ForbiddenError, NotFoundError } = require('../errors/ind
 module.exports.getCards = (req, res, next) => {
   Card.find({})
     .populate(['owner', 'likes'])
-    .then((card) => res.send({ data: card }))
+    .then((cards) => res.send(cards))
     .catch(next);
 };
 
 module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.status(CREATED_CODE).send({ data: card }))
+    .then((card) => res.status(CREATED_CODE).send(card))
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
         next(new IncorrectError(`${INCORRECT_ERROR_MESSAGE} при создании карточки.`));
@@ -35,7 +35,7 @@ module.exports.deleteCardById = (req, res, next) => {
       if (card.owner.toString() !== req.user._id) {
         throw new ForbiddenError('Доступ запрещен');
       }
-      return res.send({ data: card });
+      return res.send(card);
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
@@ -52,7 +52,7 @@ function modifyLike(req, res, next, action) {
       if (card === null) {
         throw new NotFoundError(NOT_FOUND_CARD_MESSAGE);
       }
-      return res.send({ data: card });
+      return res.send(card);
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {

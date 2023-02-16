@@ -13,7 +13,8 @@ export const register = (password, email) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ password, email }),
+    credentials: 'include',
+    body: JSON.stringify({ password: password, email: email }),
   }).then((res) => getResponse(res));
 };
 
@@ -23,8 +24,16 @@ export const authorize = (password, email) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ password, email }),
-  }).then((res) => getResponse(res));
+    credentials: 'include',
+    body: JSON.stringify({ password: password, email: email }),
+  })
+    .then((res) => getResponse(res))
+    .then((data) => {
+      if (data.token) {
+        localStorage.setItem('jwt', data.token);
+        return data;
+      }
+    });
 };
 
 export const getContent = (token) => {
@@ -34,5 +43,6 @@ export const getContent = (token) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
+    credentials: 'include',
   }).then((res) => getResponse(res));
 };
