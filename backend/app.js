@@ -15,6 +15,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const MONGOPATH = process.env.MONGOPATH || 'mongodb://127.0.0.1:27017/mestodb';
+mongoose.connect(MONGOPATH, {
+  useNewUrlParser: true,
+});
+mongoose.set('strictQuery', true);
+
+if (!process.env.JWTKEY) {
+  process.env.JWTKEY = 'secretkeyfrommesto';
+}
 const allowedCors = [
   'https://mesto-project.nomoredomains.work',
   'http://mesto-project.nomoredomains.work',
@@ -42,16 +51,6 @@ app.use((req, res, next) => {
   next();
   return null;
 });
-
-const MONGOPATH = process.env.MONGOPATH || 'mongodb://127.0.0.1:27017/mestodb';
-mongoose.connect(MONGOPATH, {
-  useNewUrlParser: true,
-});
-mongoose.set('strictQuery', true);
-
-if (!process.env.JWTKEY) {
-  process.env.JWTKEY = 'secretkeyfrommesto';
-}
 app.use(requestLogger);
 
 app.get('/crash-test', () => {

@@ -6,7 +6,7 @@ export default class Api {
   _makePromise(url, method, body) {
     return fetch(`${this._baseUrl}${url}`, {
       method: `${method}`,
-      headers: this._headers,
+      headers: { ...this._headers, authorization: `Bearer ${localStorage.getItem('jwt')}` },
       body: body,
     }).then((res) => {
       if (res.ok) {
