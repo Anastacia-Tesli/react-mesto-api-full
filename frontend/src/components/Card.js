@@ -13,11 +13,11 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   function handleDeleteClick() {
     onCardDelete(card);
   }
-  const isOwner = card.owner._id === user._id;
+  const isOwner = card.owner._id === user._id || card.owner === user._id;
   const deleteButtonClassName = `${
     isOwner ? "button place__delete-button" : "place__delete-button_hidden"
   }`;
-  const isLiked = card.likes.some((like) => like._id === user._id);
+  const isLiked = card.likes.some((like) => like._id === user._id || like === user._id);
   const likeButtonClassName = `place__like-button ${
     isLiked ? "button_active" : ""
   }`;

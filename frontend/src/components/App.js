@@ -217,15 +217,14 @@ function App() {
 
   const history = useHistory();
   function handleRegisterSubmit(password, email) {
-    console.log(password, email);
     auth
       .register(password, email)
-      .then(() => {
-        setImage(confirm);
-        setText('Вы успешно зарегистрировались!');
-      })
-      .then(() => {
-        history.push('/sign-in');
+      .then((res) => {
+        if (res.status !== 400) {
+          history.push('/sign-in');
+          setImage(confirm);
+          setText('Вы успешно зарегистрировались!');
+        }
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
@@ -243,11 +242,12 @@ function App() {
     auth
       .authorize(password, email)
       .then((data) => {
-        localStorage.setItem('jwt', data.token);
-        setEmail(email);
-        setLoggedIn(true);
-        history.push('/');
-        return data;
+        if (data.token) {
+          setEmail(email);
+          setLoggedIn(true);
+          history.push('/');
+          return data;
+        }
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);

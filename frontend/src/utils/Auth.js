@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://api.mesto-project.nomoredomains.work';
+export const BASE_URL = 'https://api.mesto-project.nomoredomains.work';
 
 function getResponse(res) {
   if (!res.ok) {
@@ -13,8 +13,7 @@ export const register = (password, email) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    credentials: 'include',
-    body: JSON.stringify({ password: password, email: email }),
+    body: JSON.stringify({ password, email }),
   }).then((res) => getResponse(res));
 };
 
@@ -24,8 +23,7 @@ export const authorize = (password, email) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    credentials: 'include',
-    body: JSON.stringify({ password: password, email: email }),
+    body: JSON.stringify({ password, email }),
   })
     .then((res) => getResponse(res))
     .then((data) => {
@@ -41,8 +39,7 @@ export const getContent = (token) => {
     method: `GET`,
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
     },
-    credentials: 'include',
   }).then((res) => getResponse(res));
 };

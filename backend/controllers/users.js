@@ -24,25 +24,22 @@ module.exports.login = (req, res, next) => {
       if (!user) {
         throw new UnauthorizedError(AUTH_ERROR_MESSAGE);
       }
-      return bcrypt.compare(password, user.password).then((matched) => {
+      bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
           throw new UnauthorizedError(AUTH_ERROR_MESSAGE);
         }
-        return user;
       });
-    })
-    .then((user) => {
       const token = jwt.sign(
         {
-          _id: user._id,
+          _id: user._id.toString(),
         },
-        process.env.JWTKEY,
+        process.env.NODE_ENV === 'production' ? process.env.JWTKEY : 'strong-secret',
         {
           expiresIn: '7d',
         },
       );
-      return res.send({
-        token,
+      res.send({
+        token, name: user.name, email: user.email,
       });
     })
     .catch(next);
@@ -50,40 +47,30 @@ module.exports.login = (req, res, next) => {
 
 module.exports.createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
-  return User.findOne({ email })
-    .then((user) => {
-      if (user !== null) {
-        throw new ConflictError('Пользователь с таким email уже зарегистрирован');
-      }
+
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => {
+      User.create({
+        name,
+        about,
+        avatar,
+        email,
+        password: hash,
+      });
     })
     .then(() => {
-      bcrypt
-        .hash(password, 10)
-        .then((hash) => {
-          User.create({
-            name,
-            about,
-            avatar,
-            email,
-            password: hash,
-          });
-        })
-        .then((user) => {
-          res
-            .status(CREATED_CODE)
-            .send({ email: user.email, name: user.name, about: user.about, avatar: user.avatar });
-        })
-        .catch((err) => {
-          if (err instanceof mongoose.Error.ValidationError) {
-            next(new IncorrectError(`${INCORRECT_ERROR_MESSAGE} при создании пользователя.`));
-          }
-          if (err.code === 11000) {
-            next();
-          }
-          next(err);
-        });
+      res.status(CREATED_CODE).send({ name, about, avatar, email });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err instanceof mongoose.Error.ValidationError) {
+        next(new IncorrectError(`${INCORRECT_ERROR_MESSAGE} при создании пользователя.`));
+      }
+      if (err.code === 11000) {
+        throw new ConflictError('Пользователь с таким email уже зарегистрирован');
+      }
+      next(err);
+    });
 };
 
 module.exports.getUser = (req, res, next) => {

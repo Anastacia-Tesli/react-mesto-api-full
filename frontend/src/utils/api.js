@@ -6,10 +6,9 @@ export default class Api {
   _makePromise(url, method, body) {
     return fetch(`${this._baseUrl}${url}`, {
       method: `${method}`,
-      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
       },
       body: body,
     }).then((res) => {
@@ -66,5 +65,5 @@ export default class Api {
 }
 
 export const api = new Api({
-  baseUrl: 'http://api.mesto-project.nomoredomains.work',
+  baseUrl: 'https://api.mesto-project.nomoredomains.work',
 });
